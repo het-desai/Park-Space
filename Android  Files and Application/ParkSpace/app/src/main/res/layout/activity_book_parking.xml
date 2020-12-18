@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="22dp"
+    tools:context=".BookParking">
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/select_vehicle"
+        android:layout_marginBottom="16dp">
+    </Spinner>
+
+    <Spinner
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:id="@+id/select_location"
+        android:layout_marginBottom="16dp">
+    </Spinner>
+
+    <Button
+        android:id="@+id/find_space"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/find_Space"
+        android:background="#FFB101"
+        android:textColor="#000000"/>
+
+    <Button
+        android:id="@+id/find_location"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:text="@string/find_Location"
+        android:background="#FFB101"
+        android:textColor="#000000"/>
+
+    <ProgressBar
+        android:id="@+id/loading_indicator_book_parking"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"/>
+
+</LinearLayout>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ParkingArea">
+
+    <TextView
+        android:id="@+id/park_area_no"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        tools:text="Parking No."
+        android:textSize="52sp"
+        android:textColor="@android:color/white"
+        android:background="@android:color/background_dark"
+        android:layout_weight="1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_weight="5">
+
+        <TextView
+            android:id="@+id/parking_spot_no_1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/p1"
+            android:textColor="@android:color/background_dark"
+            android:textStyle="bold"
+            android:textSize="64sp"
+            android:layout_weight="1" />
+
+        <ImageView
+            android:layout_width="12dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/background_dark"/>
+
+        <TextView
+            android:id="@+id/parking_spot_no_2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/p2"
+            android:textColor="@android:color/background_dark"
+            android:textStyle="bold"
+            android:textSize="64sp"
+            android:layout_weight="1"/>
+
+    </LinearLayout>
+
+</LinearLayout>
