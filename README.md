@@ -40,9 +40,11 @@
       (Note : Please set Username = "root" & Password = "dbroot")
       
       2. remote.it and configure (set WebPort 8080 or 80)
-      (Refered : Installation steps are mention very well on YouTube)
+      (Refered : Installation steps are mention very well on "https://www.youtube.com/watch?v=_B8E1dE5kW4")
     
 - Keep 2 python program file put in same folder Park_Sensing_Status.py, mysql_db_config.py
+
+- Keep 4 Php program file put in same folder (Folder Path in Raspberry Pi : /Var/www/) booking_information_ps.php, login_ps.php, park_status_info_ps.php, register_ps.php
 
 - Now run python Park_Sensing.py
 	
@@ -54,9 +56,6 @@
 
 - Extra modification
 
-   1. If you want to change parking spots then add, edit or remove location from this file [BookParking.java](https://github.com/hetdesaii/Park-Space/blob/main/Android%20%20Files%20and%20Application/ParkSpace/app/src/main/java/com/example/parkspace/BookParking.java "URL") for more details look the below screenshot.
-  
-     Example:
-     ![BookParking.java]()
+   1. If you want to change parking spots then add, edit or remove location from this file [BookParking.java](https://github.com/hetdesaii/Park-Space/blob/main/Android%20%20Files%20and%20Application/ParkSpace/app/src/main/java/com/example/parkspace/BookParking.java "URL").
 	
 - Now build the application and install app in your phone.
