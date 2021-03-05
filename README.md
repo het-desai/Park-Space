@@ -19,7 +19,7 @@
 - PhpMyAdmin, Android Studio, Remote.it
 - Numpy, CV2, Pytesseract, API's
 
-![Camera]() ![IR Sensor]() ![Raspberry Pi]() ![Android Phone]()
+Camera, IR Sensor, Raspberry Pi, Android Phone
 
 ---
 
@@ -28,14 +28,14 @@
   
    - Connect 5 IR Sensor and camera to Raspberry Pi
 	 IR Sensor pin diagram mention below
-   ![Circuit Diagram]()
+   Circuit Diagram (Photos => Hardware setup.jpg)
     
    - Install
    
       1. PhpMyAdmin and make 1 database and give name park_space_db
 		inside that database make 4 table
       
-      ![Database and Table]()
+      Database and Table (Photos => PhpMyAdmin DB.png)
       
       (Note : Please set Username = "root" & Password = "dbroot")
       
