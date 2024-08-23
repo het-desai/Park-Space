@@ -1,54 +1,48 @@
 <?php 
 	define('HOST','localhost');
-
 	define('USER','root');
-
 	define('PASS','dbroot');
-
 	define('DB','park_space_db');
-	
 	
 	if($_SERVER['REQUEST_METHOD'] == 'POST') {
 		
-		$con = mysqli_connect(HOST,USER,PASS,DB) or die(json_encode(array("Registration status" => "Unable to Connect")));
-		
-		$username = $_GET['name'];
-		
-		$emailid = $_GET['email_id'];
-		
-		$registerno = $_GET['register_no'];
-		
-		$password = $_GET['password'];
-		
-		$mode = $_GET['mode'];
-		
-		if($username == '' || $password == '' || $emailid == '' || $registerno == '' || $mode == '') {
-			echo json_encode(array("Registration status" => "Please fill all values"));
+		$conn = new mysqli(HOST, USER, PASS, DB);
+		if ($conn->connect_error) {
+			die(json_encode(array("Registration status" => "Unable to Connect")));
 		}
-		else {
+		
+		$name = $_POST['name'];
+		$emailid = $_POST['email_id'];
+		$registerno = $_POST['register_no'];
+		$password = $_POST['password'];
+		$mode = $_POST['mode'];
+		
+		if($name == '' || $password == '' || $emailid == '' || $registerno == '' || $mode == '') {
+			echo json_encode(array("Registration status" => "Please fill all values"));
+		} else {
 			
 			if($registerno == '*VISITOR*') {
 				
-				$sql = "SELECT email_id FROM user_information WHERE email_id='$emailid'";
+				$stmt = $conn->prepare("SELECT * FROM user_information WHERE email_id=?");
+				$stmt->bind_param("s", $emailid);
+				$stmt->execute();
+				$result = $stmt->get_result();
 				
-				$check = mysqli_fetch_array(mysqli_query($con, $sql));
-				
-				if(isset($check)) {
+				if($result->num_rows > 0) {
 					echo json_encode(array("Registration status" => "Registerno or Email already exist"));
 				} else {
 					
-					$sql = "SELECT register_no mode FROM user_information WHERE mode='$mode'";
-					
-					$check = mysqli_query($con, $sql);
+					$stmt = $conn->prepare("SELECT register_no FROM user_information WHERE mode=?");
+					$stmt->bind_param("s", $mode);
+					$stmt->execute();
+					$result = $stmt->get_result();
 					
 					$larger_count = 0;
 					
-					if(isset($check)) {
+					if($result->num_rows > 0) {
 						
-						while($row = mysqli_fetch_row($check)) {
-							
+						while($row = $result->fetch_row()) {
 							$visitor_current_count = (int)$row[0];
-							
 							if($larger_count < $visitor_current_count) {
 								$larger_count = $visitor_current_count;
 							}
@@ -56,9 +50,10 @@
 						
 						$registerno = (string)($larger_count + 1);
 						
-						$sql = "INSERT INTO user_information (name,email_id,register_no,password,mode) VALUES('$username','$emailid','$registerno','$password','$mode')";
+						$stmt = $conn->prepare("INSERT INTO user_information (name,email_id,register_no,password,mode) VALUES(?, ?, ?, ?, ?)");
+						$stmt->bind_param("sssss", $name, $emailid, $registerno, $password, $mode);
 						
-						if(mysqli_query($con, $sql)) {
+						if($stmt->execute()) {
 							echo json_encode(array("Registration status" => "Successfully registered"));
 						} else {
 							echo json_encode(array("Registration status" => "Oops! Please try again!"));
@@ -68,9 +63,10 @@
 						
 						$registerno = (string)($larger_count + 1);
 						
-						$sql = "INSERT INTO user_information (name,email_id,register_no,password,mode) VALUES('$username','$emailid','$registerno','$password','$mode')";
+						$stmt = $conn->prepare("INSERT INTO user_information (name,email_id,register_no,password,mode) VALUES(?, ?, ?, ?, ?)");
+						$stmt->bind_param("sssss", $name, $emailid, $registerno, $password, $mode);
 						
-						if(mysqli_query($con, $sql)) {
+						if($stmt->execute()) {
 							echo json_encode(array("Registration status" => "Successfully registered"));
 						} else {
 							echo json_encode(array("Registration status" => "Oops! Please try again!"));
@@ -79,18 +75,20 @@
 				}
 				
 			} else {
-		
-				$sql = "SELECT register_no, email_id FROM user_information WHERE register_no='$registerno' OR email_id='$emailid'";
-		
-				$check = mysqli_fetch_array(mysqli_query($con,$sql));
-		
-				if(isset($check)) {
+				
+				$stmt = $conn->prepare("SELECT register_no, email_id FROM user_information WHERE register_no=? OR email_id=?");
+				$stmt->bind_param("ss", $registerno, $emailid);
+				$stmt->execute();
+				$result = $stmt->get_result();
+				
+				if($result->num_rows > 0) {
 					echo json_encode(array("Registration status" => "Registerno or Email already exist"));
 				} else {
-			
-					$sql = "INSERT INTO user_information (name,email_id,register_no,password,mode) VALUES('$username','$emailid','$registerno','$password','$mode')";
-			
-					if(mysqli_query($con,$sql)) {
+					
+					$stmt = $conn->prepare("INSERT INTO user_information (name,email_id,register_no,password,mode) VALUES(?, ?, ?, ?, ?)");
+					$stmt->bind_param("sssss", $name, $emailid, $registerno, $password, $mode);
+					
+					if($stmt->execute()) {
 						echo json_encode(array("Registration status" => "Successfully registered"));
 					} else {
 						echo json_encode(array("Registration status" => "Oops! Please try again!"));
@@ -98,7 +96,8 @@
 				}
 			}
 		}
+		$conn->close();
 	} else {
-		echo json_encode(array("Registration status" => "Nice try, your one step towards the hacking"));
+		echo json_encode(array("Registration status" => "Nice try, you're one step towards hacking"));
 	}
 ?>

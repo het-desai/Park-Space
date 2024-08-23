@@ -1,59 +1,107 @@
-# Park-Space
+# Smart Parking System
 
-## Goal
+## Overview
 
-Book for a parking spot and save time, money, fuel, and environment
+This project is a **Smart Parking System** designed to streamline the process of booking and managing parking spaces. The system utilizes a Raspberry Pi as a web server, where PHP APIs are hosted for interaction with an Android application. Users can book parking spaces via the Android app, while the Raspberry Pi collects real-time data from sensors, updates the MySQL database, and manages parking availability.
 
----
+The project is accessible over the internet using the **Remoteit** tool, which makes the Raspberry Pi publicly available.
 
-## How its works?
+## Features
 
-If any user wants to book a parking spot, they should book it 2-3 minutes before so they can easily book the parking and save time.
+- **User-Friendly Android App**: Users can easily book parking spaces using the Android application.
+- **Real-time Sensor Data Collection**: Python scripts running on the Raspberry Pi collect real-time data from IR sensors to monitor the status of parking spots.
+- **Automated Database Management**: The system automatically updates the MySQL database with the latest parking information based on sensor data.
+- **Remote Access**: The Raspberry Pi web server is accessible over the internet using the Remoteit tool, allowing users to book parking spaces from anywhere.
 
-Fill up the registration details and add vehicle details. Now select the location where you want to park your vehicle and then select a parking spot. After this process, the application sends the data to the Raspberry Pi and keeps user and vehicle details in the database.
+## Project Structure
 
-Now the parking spot is waiting for the user, and when the user is approaching the parking lot to get at it, the camera will open and capture the number plate and verify whether this vehicle is already booked or not! If the vehicle has already been booked, then the user can directly park it, or else if the unknown vehicle comes and the space is available, then the vehicle can be parked.
+### Hardware Components
+- **Raspberry Pi**: Serves as a web server hosting PHP APIs and runs Python scripts to interface with sensors.
+- **IR Sensors**: Monitor parking spots, detecting whether they are occupied or available.
+- **Android Device**: Provides a user interface for booking and managing parking spaces through a dedicated application.
 
----
+### Software Components
+- **Python Scripts**:
+  - `Park_Sensing_Status.py`: Collects data from IR sensors and updates the MySQL database with the status of each parking spot.
+  - `mysql_db_config.py`: Contains SQL query functions used by the Python scripts to interact with the MySQL database.
+  
+- **PHP API**:
+  - `booking_information_ps.php`: Manages the booking of parking spaces in the database.
+  - `login_ps.php`: Handles user authentication for the Android app.
+  - `park_status_info_ps.php`: Provides information on the current availability of parking spots.
+  - `register_ps.php`: Manages user registration for the Android app.
 
-## Technology, Hardware, Software and Libraries
+- **Android Application**:
+  - XML files: Define the UI layout for booking parking spaces and managing user accounts.
+  - Java files: Handle user interactions and communicate with the Raspberry Pi server via PHP APIs.
 
-Software: Android studio, Remote.it, PhpMyAdmin
+### Tools Used
+- **Remoteit**: Enables remote access to the Raspberry Pi, making it accessible as a public web server.
 
-Hardware: Raspberry Pi 3B, Android Phone, Smart Phone GPS, IR Sensors, and Web Camera
+## Installation
 
-Python Library: Numpy, cv2, and Pytesseract
+### Prerequisites
 
----
+- Raspberry Pi with Raspbian OS
+- PhpMySQL server
+- PHP installed on the Raspberry Pi
+- Remoteit tool installed on Raspberry Pi
+- Android Studio for building and running the Android application
 
-## How to Setup Project
+### Setup
 
-**Raspberry Pi Setup:**
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/yourusername/smart-parking-system.git
+   ```
 
-1. Connect 5 IR Sensor (IR Sen. 1, IR Sen. 2,...) and camera to the Raspberry Pi
+2. **Setting Up the Raspberry Pi**:
+   - Install required packages:
+     ```bash
+     sudo apt-get update && sudo apt-get upgrade
+     sudo apt-get install python3-pip mysql-server php phpmyadmin
+     ```
+   - Install Python dependencies:
+     ```bash
+     pip3 install MySQLdb pytesseract numpy cv2
+     ```
+   - Set up the MySQL database. Set the username `root` and password `dbroot`. Create tables as mentioned in Photos.
+   - Install and configure the Remoteit tool to make the Raspberry Pi publicly accessible. Installation YouTube video by [SPARKLERSWeAreTheMakers](https://www.youtube.com/watch?v=_B8E1dE5kW4)
 
-![Hardware Setup](https://github.com/het-desai/Park-Space/blob/main/Photos/Hardware%20setup.jpg "Hardware setup")
+3. **Deploying the PHP API**:
+   - Place the PHP files in the `/var/www/html/` directory on your Raspberry Pi.
+   - Update the database connection settings in the PHP files as needed.
 
-2. Install
+4. **Running the Python Scripts**:
+   - Ensure the `mysql_db_config.py` is properly configured.
+   - Run the `Park_Sensing_Status.py` script:
+     ```bash
+     python3 Park_Sensing_Status.py
+     ```
 
-- Install PhpMyAdmin, create a database, and give it the name park_space_db. Inside that database, create four tables.
+5. **Setting Up the Android Application**:
+   - Open the project in Android Studio.
+   - Configure the base URL of the PHP API in the Java files (Park-Space/Android  Files and Application/ParkSpace/app/src/main/java/com/example/parkspace/URLHandler.java) to point to your Raspberry Pi's public URL provided by Remoteit.
+   - Build and run the application on an Android device.
 
-![PhpMyAdmin Database's tables](https://github.com/het-desai/Park-Space/blob/main/Photos/PhpMyAdmin%20DB.PNG "PhpMyAdmin Database's tables")
+## Usage
 
-**Note: Please set Username = "root" & Password = "dbroot")**
+- **Register and Log In**: Users can register and log in through the Android application.
+- **Book Parking Spaces**: The application allows users to view available parking spots and make bookings.
+- **Monitor Parking Status**: The Android app provides real-time updates on parking spot availability based on data collected by the Raspberry Pi.
 
-3. Install remote.it and configure (set WebPort 8080 or 80). For more detailed configuration, follow this [YT: Access Raspberry Pi ports from anywhere in the world without port forwarding using Remote.it](https://www.youtube.com/watch?v=_B8E1dE5kW4)
+## API Endpoints
 
-4. Keep two Python programme files in the same folder: Park_Sensing_Status.py and mysql_db_config.py.
+- **`booking_information_ps.php`**: Manages parking space bookings.
+- **`login_ps.php`**: Handles user login.
+- **`park_status_info_ps.php`**: Provides parking spot availability information.
+- **`register_ps.php`**: Manages user registration.
 
-5. Keep four PHP programme files put in the same folder (Folder Path in Raspberry Pi: /var/www/). booking_information_ps.php, login_ps.php, park_status_info_ps.php, register_ps.php
+## Architecture
 
-6. Now run python Park_Sensing.py
+- **Raspberry Pi**: Acts as a web server, running Python scripts to interface with sensors and hosting PHP APIs for the Android app.
+- **Android Application**: Interfaces with the Raspberry Pi server to manage and book parking spaces.
 
-**Android Studio Setup**
+## Sensor Wiring Diagram
 
-1. Install Android studio and open the project file
-
-2. Open this file [URLHandler.java](https://github.com/hetdesaii/Park-Space/blob/main/Android%20%20Files%20and%20Application/ParkSpace/app/src/main/java/com/example/parkspace/URLHandler.java "URL") and change the URL in line 5, which you got from the Remote.it web site.
-
-3. Now build the application and install app in your phone.
+![Hardware setup](https://github.com/het-desai/Park-Space/blob/main/Photos/Hardware%20setup.jpg "Hardware setup")
